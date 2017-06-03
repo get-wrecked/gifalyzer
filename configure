@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -eu
+
+main() {
+    create_virtualenv
+}
+
+create_virtualenv () {
+    virtualenv venv
+
+    # Recent pip needed to install pillow from wheel to prevent source compilation
+    ./venv/bin/pip install -U pip
+
+    ./venv/bin/pip install pillow
+}
+
+main
