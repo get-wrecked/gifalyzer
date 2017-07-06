@@ -34,8 +34,10 @@ def analyze_gif(filepath):
         'humanized_filesize': humanize_size(filesize),
         'gif_version': image.info['version'],
         'frame_delay_ms': image.info['duration'],
-        'frame_frequency': 1000/image.info['duration'],
     }
+
+    if image.info['duration']:
+        initial_report['frame_frequency'] = 1000/image.info['duration']
 
     frame_count = seek_to_last_frame(image)
 
