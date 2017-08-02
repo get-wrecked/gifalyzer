@@ -34,6 +34,7 @@ def analyze_gif(filepath):
         'humanized_filesize': humanize_size(filesize),
         'gif_version': image.info['version'],
         'frame_delay_ms': image.info['duration'],
+        'loop': image.info.get('loop', 'No'),
     }
 
     if image.info['duration']:
