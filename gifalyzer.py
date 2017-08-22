@@ -28,19 +28,28 @@ def get_args():
 def analyze_gif(filepath):
     filesize = os.stat(filepath).st_size
     image = Image.open(filepath)
+    pre_frames_loop = image.info.get('loop')
     initial_report = {
         'dimensions': image.size,
         'filesize': filesize,
         'humanized_filesize': humanize_size(filesize),
         'gif_version': image.info['version'],
         'frame_delay_ms': image.info['duration'],
-        'loop': image.info.get('loop', 'No'),
     }
 
     if image.info['duration']:
         initial_report['frame_frequency'] = 1000/image.info['duration']
 
     frame_count = seek_to_last_frame(image)
+
+    post_frames_loop = image.info.get('loop')
+
+    if pre_frames_loop is not None:
+        initial_report['loop'] = pre_frames_loop
+    elif post_frames_loop is not None:
+            initial_report['loop'] = '%d (extension block after frames)' % post_frames_loop
+    else:
+        initial_report['loop'] = 'No'
 
     total_duration_ms = initial_report['frame_delay_ms'] * frame_count + image.info['duration']
     initial_report['total_duration_ms'] = total_duration_ms
