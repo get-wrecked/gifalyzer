@@ -2,14 +2,24 @@
 
 import argparse
 import os
-import pprint
+import tempfile
 
+import requests
 from PIL import Image
 
 
 def main():
     args = get_args()
-    report = analyze_gif(args.gif)
+    is_tempfile = False
+    if args.gif.startswith('http'):
+        temp_path = download_file(args.gif)
+        args.gif = temp_path
+        is_tempfile = True
+    try:
+        report = analyze_gif(args.gif)
+    finally:
+        if is_tempfile:
+            os.remove(args.gif)
     print_report(report)
 
 
@@ -21,8 +31,18 @@ def print_report(report):
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('gif', help='Path to a gif to analyze')
+    parser.add_argument('gif', help='Path or URL to a gif to analyze')
     return parser.parse_args()
+
+
+def download_file(url):
+    destination = tempfile.NamedTemporaryFile(delete=False)
+    response = requests.get(url, stream=True)
+    chunk_size = 32*2**10
+    with destination:
+        for chunk in response.iter_content(chunk_size):
+            destination.write(chunk)
+    return destination.name
 
 
 def analyze_gif(filepath):
