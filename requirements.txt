@@ -1,4 +1,11 @@
 Pillow==4.1.1
+requests==2.18.4
 
 # pillow deps
 olefile==0.44
+
+# requests deps
+certifi==2017.7.27.1
+chardet==3.0.4
+idna==2.6
+urllib3==1.22
