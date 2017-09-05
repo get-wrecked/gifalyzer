@@ -5,8 +5,8 @@ Small tool to debug animated GIFs.
 
 ## Usage
 
-    $ ./configure
-    $ ./gifalyzer.py <path-to-gif>
+    $ pip install gifalyzer
+    $ gifalyzer <path-to-gif>
     dimensions         : (360, 640)
     filesize           : 151459
     frame_count        : 50
