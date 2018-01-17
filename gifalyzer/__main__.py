@@ -2,6 +2,7 @@ import argparse
 import os
 
 from .gif import analyze_gif
+from .png import analyze_png
 from .util import download_file
 from ._version import __version__
 
@@ -14,7 +15,10 @@ def main():
         args.gif = temp_path
         is_tempfile = True
     try:
-        report = analyze_gif(args.gif)
+        if args.png:
+            report = analyze_png(args.gif)
+        else:
+            report = analyze_gif(args.gif)
     finally:
         if is_tempfile:
             os.remove(args.gif)
@@ -26,6 +30,7 @@ def get_args():
     parser.add_argument('gif', help='Path or URL to a gif to analyze')
     parser.add_argument('-v', '--version', action='version',
         version='v%s' % __version__)
+    parser.add_argument('--png', action='store_true', default=False)
     return parser.parse_args()
 
 

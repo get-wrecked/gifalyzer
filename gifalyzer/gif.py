@@ -5,6 +5,8 @@ import os
 import requests
 from PIL import Image
 
+from .util import humanize_size
+
 
 def analyze_gif(filepath):
     filesize = os.stat(filepath).st_size
@@ -51,17 +53,6 @@ def seek_to_last_frame(image):
         pass
 
     return frame_count
-
-
-def humanize_size(size):
-    suffixes = ['']
-    suffixes.extend(list('kMGTP'))
-    suffix_index = 0
-    size = float(size)
-    while size > 1200:
-        size /= 1024
-        suffix_index += 1
-    return '%.1f%sB' % (size, suffixes[suffix_index])
 
 
 if __name__ == '__main__':
