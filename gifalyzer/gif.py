@@ -6,7 +6,7 @@ import requests
 from PIL import Image
 
 
-def analyze_gif(filepath):
+def analyze_gif(filepath, dump_palette=False):
     filesize = os.stat(filepath).st_size
     image = Image.open(filepath)
     pre_frames_loop = image.info.get('loop')
@@ -38,6 +38,11 @@ def analyze_gif(filepath):
     initial_report['last_frame_delay_ms'] = image.info['duration']
     initial_report['frame_count'] = frame_count
 
+    if dump_palette:
+        name, ext = os.path.splitext(filepath)
+        palette_path = '%s-palette%s' % (name, '.png')
+        dump_palette_to_path(image, palette_path)
+
     return initial_report
 
 
@@ -51,6 +56,27 @@ def seek_to_last_frame(image):
         pass
 
     return frame_count
+
+
+def dump_palette_to_path(image, palette_path):
+    palette = image.palette.palette
+    assert len(palette) == 768, 'Can only analyze 256 color palettes for now'
+    palette_image = Image.new('RGB', (256, 256))
+    pixels = palette_image.load()
+    all_pixels = []
+    for color_num in range(len(palette)/3):
+        colors = palette[color_num:color_num+3]
+        r, g, b = [ord(color) for color in colors]
+        all_pixels.append((r, g, b))
+
+    all_pixels.sort()
+
+    for color_num in range(256):
+        for x in range(16):
+            for y in range(16):
+                pixels[(color_num//16)*16 + x, (color_num%16)*16 + y] = all_pixels[color_num]
+
+    palette_image.save(palette_path)
 
 
 def humanize_size(size):

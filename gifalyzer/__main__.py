@@ -14,7 +14,7 @@ def main():
         args.gif = temp_path
         is_tempfile = True
     try:
-        report = analyze_gif(args.gif)
+        report = analyze_gif(args.gif, args.dump_palette)
     finally:
         if is_tempfile:
             os.remove(args.gif)
@@ -26,6 +26,8 @@ def get_args():
     parser.add_argument('gif', help='Path or URL to a gif to analyze')
     parser.add_argument('-v', '--version', action='version',
         version='v%s' % __version__)
+    parser.add_argument('-p', '--dump-palette', action='store_true',
+        help='Whether to dump the palette to a png')
     return parser.parse_args()
 
 
