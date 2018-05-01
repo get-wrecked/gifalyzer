@@ -9,7 +9,7 @@ from ._version import __version__
 def main():
     args = get_args()
     is_tempfile = False
-    if args.gif.startswith('http'):
+    if should_download(args.gif):
         temp_path = download_file(args.gif)
         args.gif = temp_path
         is_tempfile = True
@@ -19,6 +19,13 @@ def main():
         if is_tempfile:
             os.remove(args.gif)
     print_report(report)
+
+
+def should_download(gif_path):
+    if os.path.exists(gif_path):
+        return False
+
+    return gif_path.startswith('https://') or gif_path.startswith('http://')
 
 
 def get_args():
