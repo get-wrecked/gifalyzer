@@ -32,7 +32,8 @@ def analyze_gif(filepath, dump_palette=False):
     else:
         initial_report['loop'] = 'No'
 
-    total_duration_ms = initial_report['frame_delay_ms'] * frame_count + image.info['duration']
+    # Total duration is the normal duration for all frames except the last one
+    total_duration_ms = initial_report['frame_delay_ms'] * (frame_count - 1) + image.info['duration']
     initial_report['total_duration_ms'] = total_duration_ms
 
     initial_report['last_frame_delay_ms'] = image.info['duration']
