@@ -41,6 +41,7 @@ def analyze_mp4(filepath):
     report['iframes'] = sum(frame['key_frame'] for frame in frames)
     last_frame = next(f for f in frames if f['coded_picture_number'] == len(frames) - 1)
     report['last_frame_delay_ms'] = float(last_frame['pkt_duration_time'])*1000
+    report['reordered'] = frames != sorted(frames, key=lambda f: f['coded_picture_number'])
 
     return report
 
