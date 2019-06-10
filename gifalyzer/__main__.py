@@ -2,6 +2,7 @@ import argparse
 import os
 
 from .gif import analyze_gif
+from .mp4 import analyze_mp4
 from .util import download_file
 from ._version import __version__
 
@@ -14,7 +15,10 @@ def main():
         args.gif = temp_path
         is_tempfile = True
     try:
-        report = analyze_gif(args.gif, args.dump_palette)
+        if args.gif.endswith('.mp4'):
+            report = analyze_mp4(args.gif)
+        else:
+            report = analyze_gif(args.gif, args.dump_palette)
     finally:
         if is_tempfile:
             os.remove(args.gif)
