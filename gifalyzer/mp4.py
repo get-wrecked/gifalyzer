@@ -39,7 +39,7 @@ def analyze_mp4(filepath):
     ]))['frames']
     report['frame_count'] = len(frames)
     report['iframes'] = sum(frame['key_frame'] for frame in frames)
-    report['last_frame_delay_ms'] = float(frames[-1]['pkt_duration_time'])
+    report['last_frame_delay_ms'] = float(frames[-1]['pkt_duration_time'])*1000
 
     return report
 
