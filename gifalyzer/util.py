@@ -1,10 +1,12 @@
+import os
 import tempfile
 
 import requests
 
 
 def download_file(url):
-    destination = tempfile.NamedTemporaryFile(delete=False)
+    ext = os.path.splitext(url)[1]
+    destination = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
     response = requests.get(url, stream=True)
     chunk_size = 32*2**10
     with destination:
