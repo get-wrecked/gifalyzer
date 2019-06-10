@@ -5,6 +5,8 @@ import os
 import requests
 from PIL import Image
 
+from .util import humanize_size
+
 
 def analyze_gif(filepath, dump_palette=False):
     filesize = os.stat(filepath).st_size
@@ -78,17 +80,6 @@ def dump_palette_to_path(image, palette_path):
                 pixels[(color_num//16)*16 + x, (color_num%16)*16 + y] = all_pixels[color_num]
 
     palette_image.save(palette_path)
-
-
-def humanize_size(size):
-    suffixes = ['']
-    suffixes.extend(list('kMGTP'))
-    suffix_index = 0
-    size = float(size)
-    while size > 1200:
-        size /= 1024
-        suffix_index += 1
-    return '%.1f%sB' % (size, suffixes[suffix_index])
 
 
 if __name__ == '__main__':
