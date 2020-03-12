@@ -62,19 +62,20 @@ def seek_to_last_frame(image):
 
 
 def dump_palette_to_path(image, palette_path):
-    palette = image.palette.palette
-    assert len(palette) == 768, 'Can only analyze 256 color palettes for now'
+    palette = image.global_palette.palette
+    color_count = len(palette) / 3
     palette_image = Image.new('RGB', (256, 256))
     pixels = palette_image.load()
     all_pixels = []
-    for color_num in range(len(palette)/3):
-        colors = palette[color_num:color_num+3]
+    for color_num in range(color_count):
+        colors = palette[color_num*3:color_num*3+3]
         r, g, b = [ord(color) for color in colors]
+        print('Color %4s: #%02x%02x%02x \x1b[48;2;%d;%d;%dm     \x1b[0m' % ('#%d' % color_num, r, g, b, r, g, b))
         all_pixels.append((r, g, b))
 
-    all_pixels.sort()
+    # all_pixels.sort()
 
-    for color_num in range(256):
+    for color_num in range(color_count):
         for x in range(16):
             for y in range(16):
                 pixels[(color_num//16)*16 + x, (color_num%16)*16 + y] = all_pixels[color_num]
